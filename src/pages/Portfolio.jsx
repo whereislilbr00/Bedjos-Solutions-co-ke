@@ -71,15 +71,7 @@ const projects = [
     title: 'Custom Apparel',
     images: ['/images/shirt%20photo%203.jpg',
       '/images/custom%20jersey%20photo%201.jpg',
-      '/images/custom%20jersey%20photo%202.jpg',
-      '/images/custom%20jersey%20photo%203.jpg',
-      '/images/custom%20jersey%20photo%204.jpg',
-      '/images/custom%20jersey%20photo%205.jpg',
-      '/images/shirt%20photo%201.jpg',
-      '/images/shirt%20photo%202.jpg',
-      '/images/shirt%20photo%203.jpg',
-      '/images/shirt%20photo%204.jpg',
-      '/images/shirt%20photo%205.jpg'
+      '/images/custom%20jersey%20photo%202.jpg'
     ],
     desc: 'T-shirts, uniforms, promo wear.'
   }
