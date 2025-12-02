@@ -76,6 +76,19 @@ const services = [
       'images/shirt%20photo%204.jpg',
       'images/shirt%20photo%205.jpg'
     ]
+  },
+  {
+    title: 'Bedjos Sports House',
+    icon: '🏆',
+    desc: 'Selling high-quality sports goods and equipment.',
+    price: 'From KES 500',
+    images: [
+      'images/custom%20jersery%20photo%201.jpg',
+      'images/custom%20jersey%20photo%202.jpg',
+      'images/custom%20jersey%20photo%203.jpg',
+      'images/custom%20jersey%20photo%204.jpg',
+      'images/custom%20jersey%20photo%205.jpg'
+    ]
   }
 ];
 
