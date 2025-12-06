@@ -1,0 +1,32 @@
+body {
+  background: #DEB887;
+  color: #1565c0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #1565c0;
+}
+
+a, .nav-link {
+  color: #1565c0;
+  text-decoration: none;
+}
+
+button, .btn {
+  color: #fff;
+  background: #1565c0;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+input, textarea {
+  color: #1565c0;
+  border: 1px solid #1565c0;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
