@@ -13,22 +13,22 @@ export default function Home() {
         </p>
         <div className="features-grid">
           <div className="feature-item">
-            <div className="feature-icon">🎯</div>
+            <img src="/images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(5).jpeg" alt="Precision & Quality" className="feature-icon-image" />
             <h4>Precision & Quality</h4>
             <p>Every project is crafted with meticulous attention to detail, ensuring top-notch results that exceed expectations.</p>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">⚡</div>
+            <img src="/images/WhatsApp%20Image%202025-12-10%20at%201.54.43%20PM.jpeg" alt="Fast Turnaround" className="feature-icon-image" />
             <h4>Fast Turnaround</h4>
             <p>Quick delivery without compromising quality. We value your time and meet deadlines consistently.</p>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">💡</div>
+            <img src="/images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(4).jpeg" alt="Innovative Solutions" className="feature-icon-image" />
             <h4>Innovative Solutions</h4>
             <p>Creative thinking meets cutting-edge techniques to bring your vision to life in unique ways.</p>
           </div>
           <div className="feature-item">
-            <div className="feature-icon">🤝</div>
+            <img src="/images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(3).jpeg" alt="Customer-Centric" className="feature-icon-image" />
             <h4>Customer-Centric</h4>
             <p>Your satisfaction is our priority. We work closely with you to understand and fulfill your specific needs.</p>
           </div>
