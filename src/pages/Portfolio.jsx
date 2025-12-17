@@ -90,7 +90,7 @@ export default function Portfolio() {
       <div className="portfolio-grid">
         {projects.map((project, idx) => (
           <div className="portfolio-card glass" key={idx}>
-            <img src={project.images[0]} alt={`Image of ${project.title}`} className="portfolio-img" onClick={() => openModal(project.images[0])} />
+            <img src={`${import.meta.env.BASE_URL}${project.images[0]}`} alt={`Image of ${project.title}`} className="portfolio-img" onClick={() => openModal(project.images[0])} />
             <div className="portfolio-info">
               <h3>{project.title}</h3>
               <p>{project.desc}</p>
