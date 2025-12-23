@@ -7,7 +7,7 @@ import './styles/style.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename="/Bedjos-Solutions-co-ke">
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>
