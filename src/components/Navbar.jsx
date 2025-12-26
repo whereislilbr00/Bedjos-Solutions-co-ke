@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav className="navbar glass">
       <div className="navbar-brand">
-        <img src={`${import.meta.env.BASE_URL}/images/bedjos logo.png`} alt="Bedjos Solutions Logo" style={{ height: '40px', marginRight: '1rem', verticalAlign: 'middle' }} />
+        <img src={`${import.meta.env.BASE_URL}images/bedjos logo.png`} alt="Bedjos Solutions Logo" style={{ height: '40px', marginRight: '1rem', verticalAlign: 'middle' }} />
         Bedjos Solutions
       </div>
       <button className="navbar-toggle" onClick={handleMenuToggle} aria-label="Toggle menu">
