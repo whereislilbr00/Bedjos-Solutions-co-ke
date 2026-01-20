@@ -4,74 +4,74 @@ import './Portfolio.css';
 const projects = [
   {
     title: 'Company Logo',
-    images: ['/images/bedjos logo.png'],
+    images: ['images/bedjos logo.png'],
     desc: 'Bedjos Solutions official logo and branding.'
   },
   {
     title: 'Custom Signage',
-    images: ['/images/signage photo 1.jpg'],
+    images: ['images/signage photo 1.jpg'],
     desc: 'Eye-catching signage solutions for businesses and events.'
   },
   {
     title: 'Branded Apparel',
-    images: ['/images/shirt photo 1.jpg'],
+    images: ['images/shirt photo 1.jpg'],
     desc: 'Custom printed apparel for teams and promotions.'
   },
   {
     title: 'Event Printing',
-    images: ['/images/banner photo 3.jpg'],
+    images: ['images/banner photo 3.jpg'],
     desc: 'Professional printing services for events and marketing.'
   },
   {
     title: 'Logo Design',
-    images: ['/images/bedjos logo.png'],
+    images: ['images/bedjos logo.png'],
     desc: 'Creative logo design for brand identity.'
   },
   {
     title: 'Shop Branding',
-    images: ['/images/branding photo 6.jpg'],
+    images: ['images/branding photo 6.jpg'],
     desc: 'Complete shop branding and visual identity.'
   },
   {
     title: 'Promotional Materials',
-    images: ['/images/photo 22.jpeg'],
+    images: ['images/photo 22.jpeg'],
     desc: 'Flyers, brochures, and promotional print materials.'
   },
   {
     title: 'Ceramic Printing',
-    images: ['/images/branding photo 5.jpg'],
+    images: ['images/branding photo 5.jpg'],
     desc: 'Custom ceramic printing for mugs and tiles.'
   },
   {
     title: 'Banner Design',
-    images: ['/images/banner photo 1.jpg'],
+    images: ['images/banner photo 1.jpg'],
     desc: 'Large format banners for advertising and events.'
   },
   {
     title: 'Digital Graphics',
-    images: ['/images/branding photo 1.jpg'],
+    images: ['images/branding photo 1.jpg'],
     desc: 'Digital graphics for online and print media.'
   },
   {
     title: 'Poster Creation',
-    images: ['/images/photo 17.jpg'],
+    images: ['images/photo 17.jpg'],
     desc: 'Creative posters for events and promotions.'
   },
   {
     title: 'Business Cards',
-    images: ['/images/business card photo 1.jpg'],
+    images: ['images/business card photo 1.jpg'],
     desc: 'Professional business card design and printing.'
   },
   {
     title: 'T-shirt Printing',
-    images: ['/images/shirt photo 2.jpg'],
+    images: ['images/shirt photo 2.jpg'],
     desc: 'Custom t-shirt printing with vibrant colors.'
   },
   {
     title: 'Custom Apparel',
-    images: ['/images/shirt photo 3.jpg',
-      '/images/custom jersey photo 1.jpg',
-      '/images/custom jersey photo 2.jpg'
+    images: ['images/shirt photo 3.jpg',
+      'images/custom jersey photo 1.jpg',
+      'images/custom jersey photo 2.jpg'
     ],
     desc: 'T-shirts, uniforms, promo wear.'
   }
@@ -90,7 +90,7 @@ export default function Portfolio() {
       <div className="portfolio-grid">
         {projects.map((project, idx) => (
           <div className="portfolio-card glass" key={idx}>
-            <img src={project.images[0]} alt={`Image of ${project.title}`} className="portfolio-img" onClick={() => openModal(project.images[0])} />
+            <img src={`${import.meta.env.BASE_URL}${project.images[0]}`} alt={`Image of ${project.title}`} className="portfolio-img" onClick={() => openModal(project.images[0])} />
             <div className="portfolio-info">
               <h3>{project.title}</h3>
               <p>{project.desc}</p>

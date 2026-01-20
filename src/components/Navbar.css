@@ -113,16 +113,16 @@
   .navbar {
     padding: 1rem;
   }
-  
+
   .brand-text {
     display: none;
   }
-  
+
   /* Show hamburger ONLY on mobile */
   .navbar-toggle {
     display: flex;
   }
-  
+
   /* SINGLE navbar-links definition for mobile */
   .navbar-links {
     position: fixed;
@@ -142,12 +142,12 @@
     overflow-y: auto;
     display: none; /* Hidden by default */
   }
-  
+
   .navbar-links.open {
     display: flex;
     animation: slideDown 0.3s ease;
   }
-  
+
   @keyframes slideDown {
     from {
       opacity: 0;

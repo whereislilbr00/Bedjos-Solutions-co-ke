@@ -122,7 +122,7 @@ export default function Services() {
           <div className="gallery-images">
             {services[selectedIdx].images.map((img, i) => (
               <img
-                src={`/${img}`}
+                src={`${import.meta.env.BASE_URL}${img}`}
                 alt={`${services[selectedIdx].title} ${i + 1}`}
                 key={i}
                 className="service-img"
