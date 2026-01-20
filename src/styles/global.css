@@ -4,6 +4,7 @@ body {
   background: linear-gradient(120deg, #ffecd2 0%, #fcb69f 100%);
   color: #222;
   min-height: 100vh;
+  padding-top: 80px; /* Account for fixed navbar height */
 }
 
 .app-root {

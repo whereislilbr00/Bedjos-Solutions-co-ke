@@ -5,9 +5,23 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    setSubmitted(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (response.ok) {
+        setSubmitted(true);
+        setForm({ name: '', email: '', message: '' }); // Clear form
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection.');
+    }
   };
   return (
     <section className="contact-section">
