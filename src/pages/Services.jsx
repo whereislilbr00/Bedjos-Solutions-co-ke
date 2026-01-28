@@ -57,9 +57,19 @@ const services = [
     ]
   },
   {
+    title: 'DTF Printing Technology',
+    icon: '🖨️',
+    desc: 'High-quality direct-to-film printing for custom designs.',
+    price: 'From KES 1,000',
+    images: [
+      'images/WhatsApp Image 2026-01-23 at 8.25.11 AM (1).jpeg',
+      'images/WhatsApp Image 2026-01-23 at 8.25.11 AM.jpeg'
+    ]
+  },
+  {
     title: 'Custom Apparel',
     icon: '👕',
-    desc: 'T-shirts, uniforms, promo wear.',
+    desc: 'T-shirts, uniforms, promo wear, and embroidery services.',
     price: 'From KES 1,200',
     images: [
       'images/photo%207.jpg',
