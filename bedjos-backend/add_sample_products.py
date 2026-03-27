@@ -12,7 +12,7 @@ login_data = {
 }
 
 print("\n1. Logging in as admin...")
-response = requests.post(f"{BASE_URL}/auth/login", json=login_data)
+response = requests.post(f"{BASE_URL}/login", json=login_data)
 if response.status_code != 200:
     print("❌ Login failed!")
     print(response.json())

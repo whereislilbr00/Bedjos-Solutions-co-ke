@@ -13,6 +13,21 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import Register from './pages/Register';
+import { Navigate } from 'react-router-dom';
+
+const ProtectedAdminRoute = ({ children }) => {
+  const token = localStorage.getItem('token')
+  const role = localStorage.getItem('userRole')
+  
+  console.log('Admin check - token:', token, 'role:', role)
+  
+  if (!token || role !== 'admin') {
+    console.log('Access denied - redirecting to login')
+    return <Navigate to="/login" replace />
+  }
+  return children
+}
 
 export default function App() {
   return (
@@ -29,6 +44,12 @@ export default function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin" element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            } />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Routes>

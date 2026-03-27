@@ -1,72 +1,316 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
-export default function Home() {
-  return (
-    <section className="home-landing">
-      <div className="welcome-card glass" style={{ background: 'linear-gradient(135deg, #e3f2fd 0%, #fff 100%)', boxShadow: '0 8px 32px 0 rgba(21,101,192,0.12)' }}>
-        <div className="navbar-brand" style={{ fontSize: '2.5rem', color: '#1565c0', marginBottom: '0.5rem', letterSpacing: '2px', textShadow: '0 2px 8px #90caf9' }}>BEDJOS SOLUTIONS</div>
-        <p className="subtitle" style={{ fontSize: '1.3rem', color: '#1976d2', fontWeight: '500', marginBottom: '0.5rem' }}>Signs, Branding, Printing, and Creative Services.</p>
-        <p className="desc" style={{ fontSize: '1.1rem', color: '#333', marginBottom: '1.2rem', fontStyle: 'italic', background: 'rgba(21,101,192,0.05)', padding: '0.5rem 1rem', borderRadius: '0.5rem' }}>
-          <span style={{ color: '#1976d2', fontWeight: 'bold' }}>We think.</span> <span style={{ color: '#b85c38', fontWeight: 'bold' }}>We create.</span> <span style={{ color: '#1976d2', fontWeight: 'bold' }}>We deliver.</span> <br />
-          <span style={{ color: '#1565c0' }}>Explore our craft and see how we bring brands to life!</span>
-        </p>
-        <div className="features-grid">
-          <div className="feature-item">
-            <img src={`${import.meta.env.BASE_URL}images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(5).jpeg`} alt="Precision & Quality" className="feature-icon-image" />
-            <h4>Precision & Quality</h4>
-            <p>Every project is crafted with meticulous attention to detail, ensuring top-notch results that exceed expectations.</p>
-          </div>
-          <div className="feature-item">
-            <img src={`${import.meta.env.BASE_URL}images/WhatsApp%20Image%202025-12-10%20at%201.54.43%20PM.jpeg`} alt="Fast Turnaround" className="feature-icon-image" />
-            <h4>Fast Turnaround</h4>
-            <p>Quick delivery without compromising quality. We value your time and meet deadlines consistently.</p>
-          </div>
-          <div className="feature-item">
-            <img src={`${import.meta.env.BASE_URL}images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(4).jpeg`} alt="Innovative Solutions" className="feature-icon-image" />
-            <h4>Innovative Solutions</h4>
-            <p>Creative thinking meets cutting-edge techniques to bring your vision to life in unique ways.</p>
-          </div>
-          <div className="feature-item">
-            <img src={`${import.meta.env.BASE_URL}images/WhatsApp%20Image%202025-12-10%20at%201.54.42%20PM%20(3).jpeg`} alt="Customer-Centric" className="feature-icon-image" />
-            <h4>Customer-Centric</h4>
-            <p>Your satisfaction is our priority. We work closely with you to understand and fulfill your specific needs.</p>
-          </div>
-        </div>
+const stats = [
+  { number: 500, label: 'Projects', suffix: '+' },
+  { number: 100, label: 'Clients', suffix: '+' },
+  { number: 10, label: 'Years', suffix: '+' },
+];
 
-        <div className="shop-showcase">
-          <h3 style={{ color: '#b85c38', textAlign: 'center', marginBottom: '1rem', fontSize: '1.8rem' }}>🏪 Visit Our Shop Today!</h3>
-          <div className="shop-content">
-            <div className="shop-text">
-              <p style={{ fontSize: '1.2rem', color: '#1565c0', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                Discover Premium Quality Products & Services
-              </p>
-              <p style={{ color: '#333', marginBottom: '1rem' }}>
-                Transform your business with our expertly crafted signage, branding materials, and custom apparel.
-                From eye-catching banners to professional business cards, we have everything you need to make your brand stand out!
-              </p>
-              <div className="shop-features">
-                <span className="shop-feature">✨ Premium Materials</span>
-                <span className="shop-feature">🚚 Fast Delivery</span>
-                <span className="shop-feature">💯 Quality Guaranteed</span>
-                <span className="shop-feature">🎨 Custom Designs</span>
+const services = [
+  { title: 'Signage', icon: '🏷️', desc: 'Eye-catching signs & displays' },
+  { title: 'Branding', icon: '🎨', desc: 'Complete brand identity' },
+  { title: 'Printing', icon: '🖨️', desc: 'High-quality print solutions' },
+  { title: 'Custom Apparel', icon: '👕', desc: 'Branded uniforms & merch' },
+  { title: 'Banners', icon: '📣', desc: 'Large format advertising' },
+  { title: 'Business Cards', icon: '💳', desc: 'Professional stationery' },
+];
+
+const testimonials = [
+  {
+    quote: "Bedjos delivered exceptional signage for our store. Professional, fast, and high quality!",
+    author: "John M.",
+    role: "Retail Business Owner",
+    rating: "⭐⭐⭐⭐⭐"
+  },
+  {
+    quote: "From concept to completion, Bedjos delivered innovative branding that exceeded our expectations.",
+    author: "Sarah K.",
+    role: "Marketing Manager",
+    rating: "⭐⭐⭐⭐⭐"
+  },
+  {
+    quote: "Best printing service in Nairobi. Our banners and business cards looked amazing!",
+    author: "David O.",
+    role: "Event Organizer",
+    rating: "⭐⭐⭐⭐⭐"
+  },
+];
+
+export default function Home() {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [animatedStats, setAnimatedStats] = useState({});
+  const statsRef = useRef([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting && !animatedStats[index]) {
+          setAnimatedStats(prev => ({ ...prev, [index]: true }));
+        }
+      });
+    });
+
+    statsRef.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [animatedStats]);
+
+  const formatNumber = (num) => {
+    return new Intl.NumberFormat('en-US').format(num);
+  };
+
+  const getStatValue = (index) => {
+    if (animatedStats[index]) {
+      return stats[index].number;
+    }
+    return 0;
+  };
+
+  const nextTestimonial = () => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  const prevTestimonial = () => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
+  return (
+    <>
+      {/* Hero Section */}
+      <section className="hero-bg">
+        <div className="container">
+          <div className="section-header fade-in-up">
+            <h1 className="fade-in-up">We Think. We Create. We Deliver.</h1>
+            <p className="fade-in-up" style={{ fontSize: '1.25rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
+              Professional Signs, Branding, Printing & Creative Services. Elevate your business with bold, impactful solutions.
+            </p>
+          </div>
+          
+          <div className="cta-buttons fade-in-up" style={{ justifyContent: 'center', gap: '1.5rem' }}>
+            <Link to="/services" className="btn cta-hero">Explore Services</Link>
+            <Link to="/portfolio" className="btn cta-hero btn-gold">View Portfolio</Link>
+          </div>
+
+          {/* Stats */}
+          <div className="stats-grid fade-in-up" style={{ marginTop: '4rem' }}>
+            {stats.map((stat, index) => (
+              <div key={stat.label} className="stat" ref={el => (statsRef.current[index] = el)}>
+                <div className="stat-number">
+                  {formatNumber(getStatValue(index))}{stat.suffix}
+                </div>
+                <div className="stat-label">{stat.label}</div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <main>
+        {/* Why Us / Features */}
+        <section className="section why-us-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>Why Choose Bedjos Solutions?</h2>
+              <p>Expert craftsmanship backed by years of experience and unwavering commitment to excellence.</p>
             </div>
-            <div className="shop-image">
-              <img src={`${import.meta.env.BASE_URL}images/bedjos%20%20shop.jpg`} alt="Bedjos Solutions Shop" />
-              <div className="image-overlay">
-                <span className="overlay-text">Your One-Stop Branding Solution</span>
+            <div className="grid grid-cols-4">
+              <div className="card fade-in-up">
+                <div className="feature-icon" style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
+                <h3>Precision & Quality</h3>
+                <p>Every project crafted with meticulous attention to detail, ensuring top-notch results.</p>
+              </div>
+              <div className="card fade-in-up" style={{ animationDelay: '0.1s' }}>
+                <div className="feature-icon" style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</div>
+                <h3>Fast Turnaround</h3>
+                <p>Quick delivery without compromising quality. We value your time.</p>
+              </div>
+              <div className="card fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <div className="feature-icon" style={{ fontSize: '3rem', marginBottom: '1rem' }}>💡</div>
+                <h3>Innovative Solutions</h3>
+                <p>Creative thinking meets cutting-edge techniques for unique results.</p>
+              </div>
+              <div className="card fade-in-up" style={{ animationDelay: '0.3s' }}>
+                <div className="feature-icon" style={{ fontSize: '3rem', marginBottom: '1rem' }}>❤️</div>
+                <h3>Customer-Centric</h3>
+                <p>Your satisfaction is our priority. Tailored solutions for your needs.</p>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="gallery">
-        <img src={`${import.meta.env.BASE_URL}images/photo%201.jpg`} alt="Our Work Sample 1" className="gallery-img" />
-        <img src={`${import.meta.env.BASE_URL}images/photo%208.jpg`} alt="Our Work Sample 2" className="gallery-img" />
-        <img src={`${import.meta.env.BASE_URL}images/photo%203.jpg`} alt="Our Work Sample 3" className="gallery-img" />
-        <img src={`${import.meta.env.BASE_URL}images/photo%205.jpg`} alt="Our Work Sample 4" className="gallery-img" />
-      </div>
-    </section>
+        </section>
+
+        {/* Services Preview */}
+        <section className="section services-preview glass" style={{ background: 'rgba(255,255,255,0.5)' }}>
+          <div className="container">
+            <div className="section-header">
+              <h2>Our Core Services</h2>
+              <p>Comprehensive solutions for all your branding and printing needs</p>
+            </div>
+            <div className="grid grid-cols-3">
+              {services.map((service, index) => (
+                <Link key={service.title} to="/services" className="card fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="service-icon" style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>{service.icon}</div>
+                  <h3>{service.title}</h3>
+                  <p>{service.desc}</p>
+                </Link>
+              ))}
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+              <Link to="/services" className="btn btn-gold">View All Services</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW Testimonials - Clean Carousel BEFORE Shop */}
+        <section className="section testimonials-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>What Our Clients Say</h2>
+              <p>Trusted by businesses across industries</p>
+            </div>
+            <div className="testimonial-wrapper" style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+              <button 
+                className="nav-arrow left" 
+                onClick={prevTestimonial}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '0',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  zIndex: 10,
+                  boxShadow: 'var(--shadow-md)',
+                  fontSize: '1.5rem'
+                }}
+              >
+                ‹
+              </button>
+              <div className="testimonial-card glass" style={{ padding: '3rem 2.5rem', borderRadius: '1.5rem', textAlign: 'center', position: 'relative' }}>
+                <div className="avatar" style={{ 
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, var(--gold), var(--amber))',
+                  margin: '0 auto 1.5rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '2rem',
+                  fontWeight: 'bold',
+                  color: 'var(--navy)',
+                  boxShadow: 'var(--shadow-lg)'
+                }}>
+                  {testimonials[currentTestimonial].author.charAt(0)}
+                </div>
+                <div className="rating" style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--gold)' }}>
+                  {testimonials[currentTestimonial].rating}
+                </div>
+                <blockquote style={{ fontSize: '1.375rem', lineHeight: 1.6, color: 'var(--charcoal)', marginBottom: '2rem', fontStyle: 'italic', fontWeight: 300 }}>
+                  "{testimonials[currentTestimonial].quote}"
+                </blockquote>
+                <div className="author-info">
+                  <div style={{ fontSize: '1.25rem', fontWeight: '700', color: 'var(--navy)', marginBottom: '0.25rem' }}>
+                    {testimonials[currentTestimonial].author}
+                  </div>
+                  <div style={{ fontSize: '1.125rem', color: 'var(--dark-gray)' }}>
+                    {testimonials[currentTestimonial].role}
+                  </div>
+                </div>
+              </div>
+              <button 
+                className="nav-arrow right" 
+                onClick={nextTestimonial}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: '0',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255,255,255,0.9)',
+                  border: 'none',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  zIndex: 10,
+                  boxShadow: 'var(--shadow-md)',
+                  fontSize: '1.5rem'
+                }}
+              >
+                ›
+              </button>
+              <div style={{ position: 'absolute', bottom: '1rem', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '1rem' }}>
+                {testimonials.map((_, index) => (
+                  <button
+                    key={`dot-${index}`}
+                    className={`testimonial-dot ${currentTestimonial === index ? 'active' : ''}`}
+                    onClick={() => setCurrentTestimonial(index)}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%',
+                      border: 'none',
+                      background: currentTestimonial === index ? 'var(--gold)' : 'rgba(255,255,255,0.5)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: currentTestimonial === index ? '0 0 0 2px rgba(218,165,32,0.5)' : 'none'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Shop CTA */}
+        <section className="section shop-cta-section glass">
+          <div className="container">
+            <div className="section-header">
+              <h2>Visit Our Shop</h2>
+              <p>Premium materials, fast delivery, quality guaranteed</p>
+            </div>
+            <div className="grid grid-cols-2" style={{ gap: '3rem', alignItems: 'center' }}>
+              <div>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  <li style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>✨</span> Premium Materials
+                  </li>
+                  <li style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>🚚</span> Fast Delivery
+                  </li>
+                  <li style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>💯</span> Quality Guaranteed
+                  </li>
+                  <li style={{ fontSize: '1.2rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>🎨</span> Custom Designs
+                  </li>
+                </ul>
+                <Link to="/products" className="btn btn-gold" style={{ marginTop: '1rem' }}>Shop Now</Link>
+              </div>
+              <div className="shop-image" style={{ position: 'relative' }}>
+                <img 
+                  src={`${import.meta.env.BASE_URL}images/bedjos  shop.jpg`} 
+                  alt="Bedjos Solutions Shop" 
+                  className="img-responsive"
+                  style={{ boxShadow: 'var(--shadow-xl)', borderRadius: '1.5rem' }}
+                />
+
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
+

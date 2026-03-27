@@ -1,53 +1,156 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import './Checkout.css';
 
 export default function Checkout() {
   const { cart, total, clearCart } = useCart();
-  const [formData, setFormData] = useState({ customer_name: '', email: '', phone: '' });
   const navigate = useNavigate();
+  
+  // Form state variables as specified
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('mpesa');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const normalizeKenyanPhone = (phone) => {
+    let clean = phone.replace(/\D/g, '');
+    if (clean.startsWith('07')) {
+      clean = '254' + clean.substring(1);
+    }
+    if (clean.startsWith('2547') && clean.length === 12) {
+      return clean;
+    }
+    return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+    
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customer_name: formData.customer_name,
-          phone: formData.phone,
-          email: formData.email,
-          total: total
-        }),
-      });
-      if (response.ok) {
-        clearCart();
-        alert('Order placed successfully!');
-        navigate('/');
+      if (paymentMethod === 'mpesa') {
+        const normalizedPhone = normalizeKenyanPhone(phone);
+        if (!normalizedPhone) {
+          throw new Error('Please enter valid Kenyan phone (07XXXXXXXX or 2547XXXXXXXX)');
+        }
+        
+        const res = await fetch('http://localhost:5000/api/stkpush', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            phone: normalizedPhone,
+            amount: total,
+            order_id: Date.now().toString()
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setSuccess('✅ Check your phone for M-Pesa prompt. Enter your PIN.');
+          clearCart();
+        } else {
+          setError(data.error || 'M-Pesa request failed');
+        }
       } else {
-        const errorData = await response.json();
-        alert(`Error placing order: ${errorData.error || 'Unknown error'}`);
+        const res = await fetch('http://localhost:5000/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer_name: name,
+            phone: phone,
+            email: email,
+            total: total,
+            payment_method: 'cod',
+            status: 'Pending - Cash on Delivery'
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setSuccess('✅ Order placed! Our team will contact you for delivery.');
+          clearCart();
+          navigate('/');
+        } else {
+          setError(data.error || 'Failed to place order');
+        }
       }
     } catch (err) {
-      alert('Error placing order. Please check your connection.');
+      setError('Connection error: ' + err.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (total === 0) {
+    return (
+      <section className="checkout-section">
+        <h2 className="checkout-title">Checkout</h2>
+        <p>Your cart is empty. <a href="/products">Continue shopping</a></p>
+      </section>
+    );
+  }
 
   return (
     <section className="checkout-section">
       <h2 className="checkout-title">Checkout</h2>
       <form onSubmit={handleSubmit} className="checkout-form glass">
-        <input name="customer_name" placeholder="Full Name" onChange={handleChange} required />
-        <input name="email" placeholder="Email" type="email" onChange={handleChange} />
-        <input name="phone" placeholder="Phone Number" onChange={handleChange} required />
-        <p>Total: KES {total}</p>
-        <button type="submit" className="place-order-btn">Place Order</button>
+        <input 
+          placeholder="Full Name *" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required 
+        />
+        <input 
+          placeholder="Email" 
+          type="email" 
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input 
+          placeholder="Phone Number *" 
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          required 
+        />
+        
+        <div className="payment-options">
+          <label className="payment-radio">
+            <input 
+              type="radio" 
+              value="mpesa"
+              checked={paymentMethod === 'mpesa'}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            />
+            M-Pesa (Recommended)
+          </label>
+          <label className="payment-radio">
+            <input 
+              type="radio" 
+              value="cod"
+              checked={paymentMethod === 'cod'}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            />
+            Cash on Delivery
+          </label>
+        </div>
+
+        {paymentMethod === 'mpesa' && (
+          <p className="phone-note">Use Kenyan number format: 07XXXXXXXX or 2547XXXXXXXX</p>
+        )}
+
+        <p className="total">Total: KES {total.toLocaleString()}</p>
+        
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
+        
+        <button type="submit" className="place-order-btn" disabled={loading}>
+          {loading ? 'Processing...' : 'Place Order'}
+        </button>
       </form>
     </section>
   );
 }
+

@@ -10,13 +10,26 @@ class Product(db.Model):
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer, default=1)
+    price = db.Column(db.Float, nullable=False)
+    
+    order = db.relationship('Order', backref=db.backref('items', lazy='dynamic'))
+    product = db.relationship('Product', backref='order_items')
+
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120))
     total = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), default="pending")  # pending, completed, cancelled
+    status = db.Column(db.String(50), default="pending")  # pending, paid, completed, cancelled
+    payment_method = db.Column(db.String(20), nullable=False)
+    mpesa_receipt = db.Column(db.String(100), nullable=True)
+    mpesa_transaction_date = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 class Admin(db.Model):
@@ -60,3 +73,4 @@ class ContactMessage(db.Model):
     phone = db.Column(db.String(20))
     message = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+

@@ -24,41 +24,45 @@ const AdminDashboard = () => {
   }, []);
 
   const checkAuth = () => {
-    const token = localStorage.getItem('admin_token');
+    const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/admin/login');
+      navigate('/login');
       return;
     }
   };
 
   const loadDashboardData = async () => {
     try {
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('token');
       const headers = { 'Authorization': `Bearer ${token}` };
 
       // Load stats
-      const statsResponse = await fetch('/api/admin/stats', { headers });
+      const statsResponse = await fetch('http://localhost:5000/api/admin/stats', { headers });
+
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
         setStats(statsData);
       }
 
       // Load products
-      const productsResponse = await fetch('/api/products');
+      const productsResponse = await fetch('http://localhost:5000/api/products');
+
       if (productsResponse.ok) {
         const productsData = await productsResponse.json();
         setProducts(productsData);
       }
 
       // Load orders
-      const ordersResponse = await fetch('/api/admin/orders', { headers });
+      const ordersResponse = await fetch('http://localhost:5000/api/admin/orders', { headers });
+
       if (ordersResponse.ok) {
         const ordersData = await ordersResponse.json();
         setOrders(ordersData);
       }
 
       // Load messages
-      const messagesResponse = await fetch('/api/admin/messages', { headers });
+      const messagesResponse = await fetch('http://localhost:5000/api/admin/messages', { headers });
+
       if (messagesResponse.ok) {
         const messagesData = await messagesResponse.json();
         setMessages(messagesData);
@@ -73,7 +77,7 @@ const AdminDashboard = () => {
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('token');
       const response = await fetch('/api/admin/products', {
         method: 'POST',
         headers: {
@@ -103,7 +107,7 @@ const AdminDashboard = () => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('token');
       const response = await fetch(`/api/admin/products/${productId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
@@ -123,7 +127,7 @@ const AdminDashboard = () => {
 
   const handleUpdateOrderStatus = async (orderId, newStatus) => {
     try {
-      const token = localStorage.getItem('admin_token');
+      const token = localStorage.getItem('token');
       const response = await fetch(`/api/admin/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
@@ -146,9 +150,10 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_info');
-    navigate('/admin/login');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
+    navigate('/login');
   };
 
   if (loading) {

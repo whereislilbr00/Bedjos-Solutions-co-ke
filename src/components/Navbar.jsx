@@ -6,7 +6,7 @@ import './Navbar.css';
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const { cart } = useCart();
   const navigate = useNavigate();
 
@@ -14,48 +14,24 @@ export default function Navbar() {
   const closeMenu = () => setMenuOpen(false);
 
   useEffect(() => {
-    // Check login status
-    const customerToken = localStorage.getItem('customer_token');
-    const adminToken = localStorage.getItem('admin_token');
-    setIsLoggedIn(!!customerToken);
-    setIsAdminLoggedIn(!!adminToken);
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('userRole');
+    if (token && role) {
+      setIsLoggedIn(true);
+      setUserRole(role);
+    }
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    localStorage.removeItem('customer_token');
-    localStorage.removeItem('customer_info');
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
+    setUserRole('');
     navigate('/');
     closeMenu();
   };
 
-  const handleAdminLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_info');
-    setIsAdminLoggedIn(false);
-    navigate('/');
-    closeMenu();
-  };
+  const isAuth = isLoggedIn && userRole;
 
   return (
     <nav className="navbar glass">
@@ -87,35 +63,22 @@ export default function Navbar() {
         </li>
 
         {/* Authentication Links */}
-        <div className="auth-links">
-          {!isLoggedIn && !isAdminLoggedIn ? (
-            <>
-              <li><Link to="/login" className="nav-link auth-link" onClick={closeMenu}>Login</Link></li>
-              <li><Link to="/admin/login" className="nav-link admin-link" onClick={closeMenu}>Admin</Link></li>
-            </>
-          ) : (
-            <>
-              {isLoggedIn && (
-                <li>
-                  <button onClick={() => { handleLogout(); closeMenu(); }} className="nav-link logout-btn">
-                    Logout
-                  </button>
-                </li>
-              )}
-              {isAdminLoggedIn && (
-                <>
-                  <li><Link to="/admin/dashboard" className="nav-link admin-dashboard-link" onClick={closeMenu}>Dashboard</Link></li>
-                  <li>
-                    <button onClick={() => { handleAdminLogout(); closeMenu(); }} className="nav-link logout-btn">
-                      Admin Logout
-                    </button>
-                  </li>
-                </>
-              )}
-            </>
-          )}
-        </div>
+        {isAuth ? (
+          <>
+            {userRole === 'admin' && (
+              <li><Link to="/admin" className="nav-link admin-dashboard-link" onClick={closeMenu}>Admin Dashboard</Link></li>
+            )}
+            <li>
+              <button onClick={handleLogout} className="nav-link logout-btn">
+                Logout
+              </button>
+            </li>
+          </>
+        ) : (
+          <li><Link to="/login" className="nav-link auth-link" onClick={closeMenu}>Login</Link></li>
+        )}
       </ul>
     </nav>
   );
 }
+

@@ -1,32 +1,154 @@
-body {
-  background: #DEB887;
-  color: #1565c0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+/* Base Utility Styles - Business Professional */
+
+/* Cards */
+.card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #1565c0;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
 }
 
-a, .nav-link {
-  color: #1565c0;
-  text-decoration: none;
+/* Stats */
+.stat {
+  text-align: center;
+  padding: 2rem;
 }
 
-button, .btn {
-  color: #fff;
-  background: #1565c0;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+.stat-number {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
 }
 
-input, textarea {
-  color: #1565c0;
-  border: 1px solid #1565c0;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+.stat-label {
+  color: var(--dark-gray);
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* Buttons */
+.cta-hero {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+/* Section Headers */
+.section-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.section-header h2 {
+  background: linear-gradient(135deg, var(--navy), var(--charcoal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.section-header h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--amber));
+  border-radius: 2px;
+}
+
+/* Responsive Images */
+.img-responsive {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  object-fit: cover;
+}
+
+/* Hero Background */
+.hero-bg {
+  background: linear-gradient(135deg, 
+    rgba(0, 31, 63, 0.95) 0%, 
+    rgba(17, 24, 39, 0.95) 50%,
+    rgba(0, 31, 63, 0.98) 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(218, 165, 32, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 179, 71, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Counter Animation */
+.counter {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+@keyframes countUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive Grid */
+@media (max-width: 1024px) {
+  .grid-cols-4 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .grid-cols-3,
+  .grid-cols-4 { grid-template-columns: 1fr; }
+  
+  .section-header h2 { font-size: 2rem; }
+  
+  button, .btn { 
+    width: 100%; 
+    padding: 1rem;
+  }
+}
+
+/* Testimonials Carousel (CSS-only) */
+.testimonial-carousel {
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonial-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.testimonial-slide {
+  min-width: 100%;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .testimonial-slide { min-width: 33.333%; }
 }
